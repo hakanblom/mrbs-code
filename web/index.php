@@ -46,6 +46,9 @@ function make_area_select_html(string $view, int $year, int $month, int $day, in
   $out_html = '';
 
   $areas = get_area_names();
+  // Lägg till val av alla HB
+  $all = -abs($current);
+  $areas = array($all => get_vocab('all')) + $areas;
 
   // Only show the areas if there are more than one of them, otherwise
   // there's no point
@@ -414,6 +417,11 @@ $timetohighlight = get_form_var('timetohighlight', 'int');
 if ($room < 0)
 {
   $room = abs($room);
+  $view_all = 1;
+}
+// HB handle show all area
+if ($area < 0)
+{
   $view_all = 1;
 }
 

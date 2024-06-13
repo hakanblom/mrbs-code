@@ -1601,14 +1601,14 @@ function get_booking_summary(int $start, int $end, int $day_start, int $day_end)
 function month_table_innerhtml(string $view, int $view_all, int $year, int $month, int $day, int $area, int $room) : string
 {
 
-  if ($view_all)
-  {
-    return multiday_view_all_rooms_innerhtml($view, $view_all, $year, $month, $day, $area, $room);
-  }
-  else
-  {
+  //if ($view_all)
+  //{
+  //  return multiday_view_all_rooms_innerhtml($view, $view_all, $year, $month, $day, $area, $room);
+  //}
+  //else
+  //{
     return month_room_table_innerhtml($view, $view_all, $year, $month, $day, $area, $room);
-  }
+  //}
 }
 
 
@@ -1651,10 +1651,18 @@ function month_room_table_innerhtml(string $view, int $view_all, int $year, int 
 
   // Get the data.  It's much quicker to do a single SQL query getting all the
   // entries for the interval in one go, rather than doing a query for each day.
-  $entries = get_entries_by_room($room,
-                                 get_start_first_slot($month, 1, $year),
-                                 get_end_last_slot($month, $last_day_of_month, $year));
-
+  if ($view_all)
+  {
+    $entries = get_entries_by_area($area,
+                                   get_start_first_slot($month, 1, $year),
+                                   get_end_last_slot($month, $last_day_of_month, $year));
+  }
+  else
+  {
+      $entries = get_entries_by_room($room,
+                                   get_start_first_slot($month, 1, $year),
+                                   get_end_last_slot($month, $last_day_of_month, $year));
+  }
   // Draw the days of the month:
   for ($d = 1; $d <= $last_day_of_month; $d++)
   {
@@ -1783,17 +1791,27 @@ function month_room_table_innerhtml(string $view, int $view_all, int $year, int 
                        $start_first_slot,
                        $end_last_slot);
         $description_text = utf8_substr($entry['name'], 0, 255);
-        $full_text = $slot_text . " " . $description_text;
+        // HB
+         if ($view_all)
+          {
+            $rname = get_room_name($entry['room_id']);
+          }
+          else
+          {
+            $rname = "";
+          }
+        $full_text = $slot_text . " " . $rname . " " .$description_text;
+        //
         switch ($monthly_view_entries_details)
         {
           case "description":
           {
-            $display_text = $description_text;
+            $display_text = $rname   . " " . $description_text;
             break;
           }
           case "slot":
           {
-            $display_text = $slot_text;
+            $display_text = $rname   . " " . $slot_text;
             break;
           }
           case "both":

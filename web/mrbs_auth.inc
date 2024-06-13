@@ -91,6 +91,7 @@ function get_page_level($page)
     // read features.
     case 'help.php':
     case 'index.php':
+    case 'view_entry.php':
       $result = 0;
       break;
 
@@ -100,9 +101,9 @@ function get_page_level($page)
       $result = 1;
       break;
 
-    case 'view_entry.php':
-      $result = ($auth['allow_anonymous_booking']) ? 0 : 1;
-      break;
+//    case 'view_entry.php':
+//      $result = ($auth['allow_anonymous_booking']) ? 0 : 1;
+//      break;
 
     // These pages are set to have a minimum access level of 1 as ordinary users
     // should be able to access them because they will have read access and in some

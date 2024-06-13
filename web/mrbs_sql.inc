@@ -730,8 +730,6 @@ function get_entry_by_id(int $id) : ?array
   else
   {
     $result = $res->next_row_keyed();
-    // Cast the columns to their correct types
-    row_cast_columns($result, 'entry');
     // Unpack the status bits
     unpack_status($result);
   }
@@ -859,13 +857,13 @@ function get_entries_by_area(int $area_id, int $interval_start, int $interval_en
             FROM " . _tbl('entry') . " E
        LEFT JOIN " . _tbl('room') . " R ON E.room_id = R.id
        LEFT JOIN " . _tbl('participants') . " P ON P.entry_id = E.id
-           WHERE R.area_id = ?
+           WHERE ((? > 0 and R.area_id = ?) OR (? < 0))
              AND R.disabled = 0
              AND start_time < ? AND end_time > ?
         GROUP BY E.id
         ORDER BY start_time, E.id";   // necessary so that multiple bookings appear in the right order
 
-  $res = db()->query($sql, array($area_id, $interval_end, $interval_start));
+  $res = db()->query($sql, array($area_id,$area_id,$area_id, $interval_end, $interval_start));
 
   $result = $res->all_rows_keyed();
 
@@ -2175,11 +2173,12 @@ function get_room_details(int $room_id) : ?array
 // otherwise just the ones that are not disabled.
 // If $include_invisible is TRUE then all rooms are returned, whether or not they are visible,
 // otherwise just the ones that are visible to the current user.
+// HB Area < 0 show all areas
 function get_rooms($area, bool $include_disabled=false, bool $include_invisible=false) : array
 {
   $sql = "SELECT R.*
             FROM " . _tbl('room') . " R, " . _tbl('area') . " A
-           WHERE R.area_id=?
+           WHERE ((R.area_id=?) OR (?<0))
            AND R.area_id = A.id";
 
   if (!($include_disabled))
@@ -2195,7 +2194,7 @@ function get_rooms($area, bool $include_disabled=false, bool $include_invisible=
     $sql .= " ORDER BY R.sort_key";
   }
 
-  $res = db()->query($sql, array($area));
+  $res = db()->query($sql, array($area,$area));
 
   $result = array();
 
