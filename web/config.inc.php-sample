@@ -82,4 +82,18 @@ $db_persist = false;
    to change the default configuration. Do _NOT_ modify systemdefaults.inc.php
    or areadefaults.inc.php.  */
 
+// Settings used to enable new month view
+$weekstarts = 1;
+$view_week_number = false;
+$mincals_week_numbers = true;
+$display_mincals = true;
+$display_mincals_above = true;
 
+$datetime_formats['time'] = array(
+      'pattern' => 'HH:mm'
+    );
+
+$always_offer_view_all = true;
+$default_view = "month";
+$eveningends           = 23;
+$monthly_view_entries_details = "both";
