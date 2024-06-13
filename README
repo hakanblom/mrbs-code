@@ -2,6 +2,9 @@ Meeting Room Booking System
 http://mrbs.sourceforge.net/
 -------------------------------
 
+Fork to enable new month view with all rooms displayed.
+
+
 The Meeting Room Booking System (MRBS) is a PHP-based application for
 booking meeting rooms (surprisingly!). I got annoyed with the piles of books
 which were being used to book meetings. They were slow, hard to edit and only
